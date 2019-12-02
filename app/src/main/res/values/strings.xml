@@ -1,0 +1,30 @@
+<resources>
+    <string name="app_name">Equipos</string>
+    <string name="action_settings">Settings</string>
+    <string name="loading_tvInfo">Introduce la dirección IP del servidor</string>
+    <string name="loading_etAddress">Dirección IP o URL</string>
+    <string name="loading_cbRemember">Recordar</string>
+    <string name="loading_btConnect">Conectar</string>
+    <string name="title_activity_teams">Equipos</string>
+    <string name="preference_server">Dirección IP o URL</string>
+    <string name="toast_connecting">Conectando...</string>
+    <string name="tietInvalidServer">Dirección IP o URL no válida</string>
+    <string name="stadium_capacity">espectadores</string>
+    <string name="tvError">¡Error!</string>
+    <string name="title_activity_add_team">Añadir equipo</string>
+    <string name="tilName">Nombre del equipo</string>
+    <string name="tilCity">Ciudad del equipo</string>
+    <string name="tilStadium">Nombre del estadio</string>
+    <string name="tilStadium_capacity">Capacidad del estadio</string>
+    <string name="btAdd">Añadir</string>
+    <string name="tvLoading">Conectando</string>
+    <string name="etNoValue">Introduce un valor</string>
+    <string name="toastAddingError">No se pudo añadir</string>
+    <string name="toastAdding">Añadiendo</string>
+    <string name="tmPlayers">Plantilla</string>
+    <string name="tmEdit">Editar</string>
+    <string name="tmDelete">Eliminar</string>
+    <string name="toastDeleting">Eliminando...</string>
+
+
+</resources>

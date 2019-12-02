@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".view.LoadingActivity">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/clLoading"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/defaultMargin"
+        android:layout_marginLeft="@dimen/defaultMargin"
+        android:layout_marginTop="@dimen/defaultMargin"
+        android:layout_marginEnd="@dimen/defaultMargin"
+        android:layout_marginRight="@dimen/defaultMargin"
+        android:layout_marginBottom="@dimen/defaultMargin"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintWidth_default="wrap">
+
+        <TextView
+            android:id="@+id/tvLoading"
+            style="@style/BigTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/defaultMargin"
+            android:text="@string/tvLoading"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/loading_spinner"
+            />
+
+        <ProgressBar
+            android:id="@+id/loading_spinner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:indeterminateTint="@color/colorPrimary"
+            android:indeterminateTintMode="src_atop"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvLoading" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/clForm"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/defaultMargin"
+        android:layout_marginLeft="@dimen/defaultMargin"
+        android:layout_marginTop="@dimen/defaultMargin"
+        android:layout_marginEnd="@dimen/defaultMargin"
+        android:layout_marginRight="@dimen/defaultMargin"
+        android:layout_marginBottom="@dimen/defaultMargin"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintWidth_default="wrap">
+
+        <TextView
+            android:id="@+id/tvInfo"
+            style="@style/Title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center|center_vertical"
+            android:text="@string/loading_tvInfo"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/tilAddress"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/defaultMargin"
+            android:hint="@string/loading_etAddress"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvInfo">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/tietAddress"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textUri"
+                android:maxLines="1" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <CheckBox
+            android:id="@+id/cbRemember"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/loading_cbRemember"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tilAddress" />
+
+        <Button
+            android:id="@+id/btConnect"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/largeMargin"
+            android:text="@string/loading_btConnect"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/cbRemember" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

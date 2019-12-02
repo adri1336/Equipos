@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/clTeam"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+
+    android:focusable="true"
+    android:clickable="true"
+    android:foreground="?android:attr/selectableItemBackground">
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_ivTeam"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.3" />
+
+    <ImageView
+        android:id="@+id/ivTeam"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="@dimen/defaultMargin"
+        android:layout_marginLeft="@dimen/defaultMargin"
+        android:layout_marginTop="@dimen/defaultMargin"
+        android:layout_marginBottom="@dimen/defaultMargin"
+        android:scaleType="centerInside"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/guideline_ivTeam"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_team_default"
+        tools:ignore="ContentDescription" />
+
+    <TextView
+        android:id="@+id/tvTeam"
+        style="@style/BigTitle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/defaultMargin"
+        android:layout_marginLeft="@dimen/defaultMargin"
+        android:layout_marginTop="@dimen/defaultMargin"
+        android:layout_marginEnd="@dimen/defaultMargin"
+        android:layout_marginRight="@dimen/defaultMargin"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/guideline_ivTeam"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="F.C. Barcelona" />
+
+    <TextView
+        android:id="@+id/tvCity"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="@+id/tvTeam"
+        app:layout_constraintStart_toStartOf="@+id/tvTeam"
+        app:layout_constraintTop_toBottomOf="@+id/tvTeam"
+        tools:text="Barcelona" />
+
+    <TextView
+        android:id="@+id/tvStadium"
+        style="@style/Title"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/defaultMargin"
+        android:layout_marginBottom="@dimen/defaultMargin"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/tvCity"
+        app:layout_constraintStart_toStartOf="@+id/tvCity"
+        app:layout_constraintTop_toBottomOf="@+id/tvCity"
+        tools:text="Camp Nou (99.354 espectadores)" />
+
+    <View
+        android:id="@+id/view"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:background="@android:color/darker_gray"
+        app:layout_constraintStart_toStartOf="@id/tvStadium"
+        app:layout_constraintEnd_toEndOf="@id/tvStadium"
+        app:layout_constraintTop_toBottomOf="@id/tvStadium"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
