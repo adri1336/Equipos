@@ -1,11 +1,10 @@
 package com.example.equipos.model.rest;
 
-import androidx.annotation.Nullable;
 
 import com.example.equipos.model.data.Team;
 
 import java.util.ArrayList;
-;
+
 import okhttp3.MultipartBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -30,10 +29,10 @@ public interface TeamClient
     Call<Boolean> upload(@Part MultipartBody.Part file);
 
     @GET("team/{id}")
-    Call<Team> getId(@Path("id") long id);
+    Call<Team> getId(@Path("id") Long id);
 
     @PUT("team/{id}")
-    Call<Boolean> put(@Path("id") long id, @Body Team team);
+    Call<Boolean> put(@Path("id") Long id, @Body Team team);
 
     @DELETE("team/{id}")
     Call<Boolean> delete(@Path("id") Long id);

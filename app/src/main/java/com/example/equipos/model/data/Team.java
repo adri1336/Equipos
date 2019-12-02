@@ -19,13 +19,25 @@ public class Team implements Parcelable
 
     protected Team(Parcel in)
     {
-        if(in.readByte() == 0) { id = null; }
-        else { id = in.readLong(); }
+        if(in.readByte() == 0)
+        {
+            id = null;
+        }
+        else
+        {
+            id = in.readLong();
+        }
         name = in.readString();
         city = in.readString();
         stadium = in.readString();
-        if(in.readByte() == 0) { stadium_capacity = null; }
-        else { stadium_capacity = in.readInt(); }
+        if(in.readByte() == 0)
+        {
+            stadium_capacity = null;
+        }
+        else
+        {
+            stadium_capacity = in.readInt();
+        }
     }
 
     public static final Creator<Team> CREATOR = new Creator<Team>()
@@ -43,7 +55,39 @@ public class Team implements Parcelable
         }
     };
 
-    public long getId()
+    @Override
+    public int describeContents()
+    {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags)
+    {
+        if(id == null)
+        {
+            dest.writeByte((byte) 0);
+        }
+        else
+        {
+            dest.writeByte((byte) 1);
+            dest.writeLong(id);
+        }
+        dest.writeString(name);
+        dest.writeString(city);
+        dest.writeString(stadium);
+        if(stadium_capacity == null)
+        {
+            dest.writeByte((byte) 0);
+        }
+        else
+        {
+            dest.writeByte((byte) 1);
+            dest.writeInt(stadium_capacity);
+        }
+    }
+
+    public Long getId()
     {
         return id;
     }
@@ -99,29 +143,4 @@ public class Team implements Parcelable
         return "Team{" + "id=" + id + ", name='" + name + '\'' + ", city='" + city + '\'' + ", stadium='" + stadium + '\'' + ", stadium_capacity=" + stadium_capacity + '}';
     }
 
-    @Override
-    public int describeContents()
-    {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags)
-    {
-        if(id == null) { dest.writeByte((byte) 0); }
-        else
-        {
-            dest.writeByte((byte) 1);
-            dest.writeLong(id);
-        }
-        dest.writeString(name);
-        dest.writeString(city);
-        dest.writeString(stadium);
-        if(stadium_capacity == null) { dest.writeByte((byte) 0); }
-        else
-        {
-            dest.writeByte((byte) 1);
-            dest.writeInt(stadium_capacity);
-        }
-    }
 }

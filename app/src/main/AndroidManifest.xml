@@ -13,10 +13,15 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".view.EditTeamActivity"
+            android:label="@string/title_activity_edit_team"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:parentActivityName=".view.TeamsActivity"></activity>
+        <activity
             android:name=".view.AddTeamActivity"
-            android:parentActivityName=".view.TeamsActivity"
             android:label="@string/title_activity_add_team"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:parentActivityName=".view.TeamsActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".view.TeamsActivity"
             android:label="@string/title_activity_teams"

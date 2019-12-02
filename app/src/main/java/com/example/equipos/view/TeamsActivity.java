@@ -1,7 +1,9 @@
 package com.example.equipos.view;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.PopupMenu;
@@ -31,6 +33,8 @@ public class TeamsActivity extends AppCompatActivity
     private FloatingActionButton fabAdd;
     private TextView tvError;
     private RecyclerView rvTeams;
+
+    private static Toast toast;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -86,11 +90,13 @@ public class TeamsActivity extends AppCompatActivity
                             }
                             case R.id.tmEdit:
                             {
+                                Intent intent = new Intent(TeamsActivity.this, EditTeamActivity.class);
+                                intent.putExtra("team", team);
+                                TeamsActivity.this.startActivity(intent);
                                 break;
                             }
                             case R.id.tmDelete:
                             {
-                                Toast.makeText(TeamsActivity.this, TeamsActivity.this.getString(R.string.toastDeleting), Toast.LENGTH_LONG).show();
                                 teamsActivityVM.delete(team);
                                 break;
                             }
@@ -128,6 +134,21 @@ public class TeamsActivity extends AppCompatActivity
         {
             rvTeams.setVisibility(View.VISIBLE);
             tvError.setVisibility(View.INVISIBLE);
+        }
+    }
+
+    public static void makeToast(Context context, String title, int duration)
+    {
+        if(toast != null)
+        {
+            toast.cancel();
+            toast = null;
+        }
+
+        if(title != null)
+        {
+            toast = Toast.makeText(context, title, duration);
+            toast.show();
         }
     }
 }

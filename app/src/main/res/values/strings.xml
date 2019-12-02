@@ -25,6 +25,9 @@
     <string name="tmEdit">Editar</string>
     <string name="tmDelete">Eliminar</string>
     <string name="toastDeleting">Eliminando...</string>
-
-
+    <string name="toastDeleted">Eliminado</string>
+    <string name="title_activity_edit_team">Editar equipo</string>
+    <string name="toastUpdatingError">No se pudo actualizar</string>
+    <string name="btUpdate">Actualizar</string>
+    <string name="toastUpdating">Actualizando</string>
 </resources>

@@ -8,6 +8,7 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -17,7 +18,7 @@ import androidx.preference.PreferenceManager;
 import com.example.equipos.R;
 import com.example.equipos.model.data.Team;
 import com.example.equipos.model.repository.TeamRepository;
-import com.example.equipos.view.AddTeamActivity;
+import com.example.equipos.view.EditTeamActivity;
 import com.example.equipos.view.TeamsActivity;
 
 import java.io.BufferedInputStream;
@@ -26,65 +27,65 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
-public class AddTeamActivityVM extends AndroidViewModel
+public class EditTeamActivityVM extends AndroidViewModel
 {
     private Uri image;
     private String name, city, stadium;
     private Integer stadium_capacity;
 
-    private AddTeamActivity addTeamActivity;
+    private EditTeamActivity editTeamActivity;
     private String server;
     private TeamRepository teamRepository;
-    private boolean adding;
+    private boolean updating;
     private File imageFile;
 
-    public AddTeamActivityVM(@NonNull Application application)
+    public EditTeamActivityVM(@NonNull Application application)
     {
         super(application);
     }
 
-    public boolean isAdding()
+    public boolean isUpdating()
     {
-        return adding;
+        return updating;
     }
 
-    public void setAdding(boolean adding)
+    public void setUpdating(boolean updating)
     {
-        this.adding = adding;
+        this.updating = updating;
     }
 
-    public void add(Team team)
+    public void update(final Team team)
     {
-        adding = true;
-        teamRepository.add(team, new TeamRepository.OnAddTeamRepositoryListener()
+        updating = true;
+        teamRepository.update(team, new TeamRepository.OnUpdatedTeamRepositoryListener()
         {
             @Override
-            public void onSuccess(Long id)
+            public void onSuccess(Boolean updated)
             {
                 if(imageFile == null)
                 {
-                    adding = false;
-                    Intent intent = new Intent(addTeamActivity, TeamsActivity.class);
-                    addTeamActivity.startActivity(intent);
+                    updating = false;
+                    Intent intent = new Intent(editTeamActivity, TeamsActivity.class);
+                    editTeamActivity.startActivity(intent);
                 }
                 else
                 {
-                    teamRepository.upload(id, imageFile, new TeamRepository.OnUploadTeamRepositoryListener()
+                    teamRepository.upload(team.getId(), imageFile, new TeamRepository.OnUploadTeamRepositoryListener()
                     {
                         @Override
                         public void onSuccess(Boolean uploaded)
                         {
-                            adding = false;
-                            Intent intent = new Intent(addTeamActivity, TeamsActivity.class);
-                            addTeamActivity.startActivity(intent);
+                            updating = false;
+                            Intent intent = new Intent(editTeamActivity, TeamsActivity.class);
+                            editTeamActivity.startActivity(intent);
                         }
 
                         @Override
                         public void onError()
                         {
-                            adding = false;
-                            Intent intent = new Intent(addTeamActivity, TeamsActivity.class);
-                            addTeamActivity.startActivity(intent);
+                            updating = false;
+                            Intent intent = new Intent(editTeamActivity, TeamsActivity.class);
+                            editTeamActivity.startActivity(intent);
                         }
                     });
                 }
@@ -93,18 +94,18 @@ public class AddTeamActivityVM extends AndroidViewModel
             @Override
             public void onError()
             {
-                adding = false;
-                addTeamActivity.setLoading(false);
-                Toast.makeText(addTeamActivity, addTeamActivity.getText(R.string.toastAddingError), Toast.LENGTH_LONG).show();
+                updating = false;
+                editTeamActivity.setLoading(false);
+                Toast.makeText(editTeamActivity, editTeamActivity.getText(R.string.toastUpdatingError), Toast.LENGTH_LONG).show();
             }
         });
     }
 
-    public void setAddTeamActivity(AddTeamActivity addTeamActivity)
+    public void setEditTeamActivity(EditTeamActivity editTeamActivity)
     {
-        this.addTeamActivity = addTeamActivity;
+        this.editTeamActivity = editTeamActivity;
 
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(addTeamActivity);
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(editTeamActivity);
         server = sharedPreferences.getString("server", "localhost");
         teamRepository = new TeamRepository(server);
     }
@@ -118,6 +119,11 @@ public class AddTeamActivityVM extends AndroidViewModel
     {
         this.image = image;
         saveSelectedImageInFile(image);
+    }
+
+    public String getServer()
+    {
+        return server;
     }
 
     public String getName()
@@ -167,7 +173,7 @@ public class AddTeamActivityVM extends AndroidViewModel
         {
             try
             {
-                bitmap = MediaStore.Images.Media.getBitmap(addTeamActivity.getContentResolver(), uri);
+                bitmap = MediaStore.Images.Media.getBitmap(editTeamActivity.getContentResolver(), uri);
             }
             catch (IOException e)
             {
@@ -178,7 +184,7 @@ public class AddTeamActivityVM extends AndroidViewModel
         {
             try
             {
-                final InputStream in = addTeamActivity.getContentResolver().openInputStream(uri);
+                final InputStream in = editTeamActivity.getContentResolver().openInputStream(uri);
                 BufferedInputStream bufferedInputStream = new BufferedInputStream(in);
                 bitmap = BitmapFactory.decodeStream(bufferedInputStream);
             }
@@ -196,7 +202,7 @@ public class AddTeamActivityVM extends AndroidViewModel
 
     private File saveBitmapInFile(Bitmap bitmap)
     {
-        File file = new File(addTeamActivity.getFilesDir(), "temp.jpg");
+        File file = new File(editTeamActivity.getFilesDir(), "temp.jpg");
         FileOutputStream out = null;
         try
         {

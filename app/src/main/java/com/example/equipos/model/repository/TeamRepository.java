@@ -95,6 +95,25 @@ public class TeamRepository
         });
     }
 
+    public void update(final Team team, final OnUpdatedTeamRepositoryListener onUpdatedTeamRepositoryListener)
+    {
+        Call<Boolean> call = teamClient.put(team.getId(), team);
+        call.enqueue(new Callback<Boolean>()
+        {
+            @Override
+            public void onResponse(Call<Boolean> call, Response<Boolean> response)
+            {
+                onUpdatedTeamRepositoryListener.onSuccess(response.body());
+            }
+
+            @Override
+            public void onFailure(Call<Boolean> call, Throwable t)
+            {
+                onUpdatedTeamRepositoryListener.onError();
+            }
+        });
+    }
+
     public void delete(Team team, final OnDeleteTeamRepositoryListener onDeleteTeamRepositoryListener)
     {
         Call<Boolean> call = teamClient.delete(team.getId());
@@ -129,6 +148,12 @@ public class TeamRepository
     public interface OnUploadTeamRepositoryListener
     {
         void onSuccess(Boolean uploaded);
+        void onError();
+    }
+
+    public interface OnUpdatedTeamRepositoryListener
+    {
+        void onSuccess(Boolean updated);
         void onError();
     }
 

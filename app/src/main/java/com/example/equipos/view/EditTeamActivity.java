@@ -1,6 +1,7 @@
 package com.example.equipos.view;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 
 import com.bumptech.glide.Glide;
@@ -9,6 +10,9 @@ import com.bumptech.glide.request.RequestOptions;
 import com.example.equipos.R;
 import com.example.equipos.model.data.Team;
 import com.example.equipos.model.view.AddTeamActivityVM;
+import com.example.equipos.model.view.EditTeamActivityVM;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
@@ -21,19 +25,23 @@ import androidx.lifecycle.ViewModelProviders;
 import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 
-public class AddTeamActivity extends AppCompatActivity
+public class EditTeamActivity extends AppCompatActivity
 {
     private static final int PHOTO_SELECTED = 1;
 
-    private AddTeamActivityVM addTeamActivityVM;
+    private EditTeamActivityVM editTeamActivityVM;
     private ImageView ivTeam;
     private TextInputLayout tilName, tilCity, tilStadium, tilStadium_capacity;
     private TextInputEditText tietName, tietCity, tietStadium, tietStadium_capacity;
-    private Button btAdd;
+    private Button btUpdate;
+
+    private Team team;
 
     private ConstraintLayout clLoading, clForm;
 
@@ -41,14 +49,31 @@ public class AddTeamActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_team);
+        setContentView(R.layout.activity_edit_team);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
-        addTeamActivityVM = ViewModelProviders.of(this).get(AddTeamActivityVM.class);
-        addTeamActivityVM.setAddTeamActivity(this);
+        team = getIntent().getExtras().getParcelable("team");
+
+        editTeamActivityVM = ViewModelProviders.of(this).get(EditTeamActivityVM.class);
+        editTeamActivityVM.setEditTeamActivity(this);
+
+        if(editTeamActivityVM.getImage() == null)
+            editTeamActivityVM.setImage(Uri.parse("http://" + editTeamActivityVM.getServer() + "/web/equipos/public/upload/images/teams/" + team.getId() + ".jpg"));
+
+        if(editTeamActivityVM.getName() == null)
+            editTeamActivityVM.setName(team.getName());
+
+        if(editTeamActivityVM.getCity() == null)
+            editTeamActivityVM.setCity(team.getCity());
+
+        if(editTeamActivityVM.getStadium() == null)
+            editTeamActivityVM.setStadium(team.getStadium());
+
+        if(editTeamActivityVM.getStadium_capacity() == null)
+            editTeamActivityVM.setStadium_capacity(team.getStadium_capacity());
 
         clLoading = findViewById(R.id.clLoading);
         clForm = findViewById(R.id.clForm);
@@ -62,7 +87,7 @@ public class AddTeamActivity extends AppCompatActivity
         tietCity = findViewById(R.id.tietCity);
         tietStadium = findViewById(R.id.tietStadium);
         tietStadium_capacity = findViewById(R.id.tietStadium_capacity);
-        btAdd = findViewById(R.id.btAdd);
+        btUpdate = findViewById(R.id.btUpdate);
 
         //Text input layouts watchers
         tietName.addTextChangedListener(new TextWatcher()
@@ -76,7 +101,7 @@ public class AddTeamActivity extends AppCompatActivity
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count)
             {
-                addTeamActivityVM.setName(s.toString());
+                editTeamActivityVM.setName(s.toString());
             }
 
             @Override
@@ -96,7 +121,7 @@ public class AddTeamActivity extends AppCompatActivity
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count)
             {
-                addTeamActivityVM.setCity(s.toString());
+                editTeamActivityVM.setCity(s.toString());
             }
 
             @Override
@@ -116,7 +141,7 @@ public class AddTeamActivity extends AppCompatActivity
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count)
             {
-                addTeamActivityVM.setStadium(s.toString());
+                editTeamActivityVM.setStadium(s.toString());
             }
 
             @Override
@@ -137,7 +162,7 @@ public class AddTeamActivity extends AppCompatActivity
             public void onTextChanged(CharSequence s, int start, int before, int count)
             {
                 if(!s.toString().isEmpty())
-                    addTeamActivityVM.setStadium_capacity(Integer.parseInt(s.toString()));
+                    editTeamActivityVM.setStadium_capacity(Integer.parseInt(s.toString()));
             }
 
             @Override
@@ -147,20 +172,29 @@ public class AddTeamActivity extends AppCompatActivity
         });
 
         //Set values
-        if(addTeamActivityVM.getImage() != null)
-            ivTeam.setImageURI(addTeamActivityVM.getImage());
+        if(editTeamActivityVM.getImage() != null)
+        {
+            Glide.with(this)
+                    .load(editTeamActivityVM.getImage())
+                    .apply(new RequestOptions()
+                            .placeholder(R.drawable.ic_team_default)
+                            .fitCenter()
+                            .diskCacheStrategy(DiskCacheStrategy.NONE)
+                            .skipMemoryCache(true))
+                    .into(ivTeam);
+        }
 
-        if(addTeamActivityVM.getName() != null && !addTeamActivityVM.getName().isEmpty())
-            tietName.setText(addTeamActivityVM.getName());
+        if(editTeamActivityVM.getName() != null && !editTeamActivityVM.getName().isEmpty())
+            tietName.setText(editTeamActivityVM.getName());
 
-        if(addTeamActivityVM.getCity() != null && !addTeamActivityVM.getCity().isEmpty())
-            tietCity.setText(addTeamActivityVM.getCity());
+        if(editTeamActivityVM.getCity() != null && !editTeamActivityVM.getCity().isEmpty())
+            tietCity.setText(editTeamActivityVM.getCity());
 
-        if(addTeamActivityVM.getStadium() != null && !addTeamActivityVM.getStadium().isEmpty())
-            tietStadium.setText(addTeamActivityVM.getStadium());
+        if(editTeamActivityVM.getStadium() != null && !editTeamActivityVM.getStadium().isEmpty())
+            tietStadium.setText(editTeamActivityVM.getStadium());
 
-        if(addTeamActivityVM.getStadium_capacity() != null)
-            tietStadium_capacity.setText(addTeamActivityVM.getStadium_capacity().toString());
+        if(editTeamActivityVM.getStadium_capacity() != null)
+            tietStadium_capacity.setText(editTeamActivityVM.getStadium_capacity().toString());
 
         //Team shield image
         ivTeam.setOnClickListener(new View.OnClickListener()
@@ -173,13 +207,13 @@ public class AddTeamActivity extends AppCompatActivity
             }
         });
 
-        //Add button
-        btAdd.setOnClickListener(new View.OnClickListener()
+        //Update button
+        btUpdate.setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View v)
             {
-                if(!addTeamActivityVM.isAdding())
+                if(!editTeamActivityVM.isUpdating())
                 {
                     boolean add = true;
                     String name, city, stadium, stadium_capacity;
@@ -190,33 +224,38 @@ public class AddTeamActivity extends AppCompatActivity
 
                     if(name.isEmpty())
                     {
-                        tilName.setError(AddTeamActivity.this.getString(R.string.etNoValue));
+                        tilName.setError(EditTeamActivity.this.getString(R.string.etNoValue));
                         add = false;
                     }
 
                     if(city.isEmpty())
                     {
-                        tilCity.setError(AddTeamActivity.this.getString(R.string.etNoValue));
+                        tilCity.setError(EditTeamActivity.this.getString(R.string.etNoValue));
                         add = false;
                     }
 
                     if(stadium.isEmpty())
                     {
-                        tilStadium.setError(AddTeamActivity.this.getString(R.string.etNoValue));
+                        tilStadium.setError(EditTeamActivity.this.getString(R.string.etNoValue));
                         add = false;
                     }
 
                     if(stadium_capacity.isEmpty())
                     {
-                        tilStadium_capacity.setError(AddTeamActivity.this.getString(R.string.etNoValue));
+                        tilStadium_capacity.setError(EditTeamActivity.this.getString(R.string.etNoValue));
                         add = false;
                     }
 
                     if(add)
                     {
-                        addTeamActivityVM.setAdding(true);
-                        Team team = new Team(name, city, stadium, Integer.parseInt(stadium_capacity));
-                        addTeamActivityVM.add(team);
+                        editTeamActivityVM.setUpdating(true);
+                        setLoading(true);
+
+                        team.setName(name);
+                        team.setCity(city);
+                        team.setStadium(stadium);
+                        team.setStadium_capacity(Integer.parseInt(stadium_capacity));
+                        editTeamActivityVM.update(team);
                     }
                 }
             }
@@ -229,9 +268,9 @@ public class AddTeamActivity extends AppCompatActivity
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode == PHOTO_SELECTED && resultCode == RESULT_OK && data != null && data.getData() != null)
         {
-            addTeamActivityVM.setImage(data.getData());
+            editTeamActivityVM.setImage(data.getData());
             Glide.with(this)
-                    .load(addTeamActivityVM.getImage())
+                    .load(editTeamActivityVM.getImage())
                     .apply(new RequestOptions()
                             .placeholder(R.drawable.ic_team_default)
                             .fitCenter()

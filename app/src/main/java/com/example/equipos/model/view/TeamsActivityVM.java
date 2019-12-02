@@ -2,6 +2,7 @@ package com.example.equipos.model.view;
 
 import android.app.Application;
 import android.content.SharedPreferences;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
@@ -9,6 +10,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.preference.PreferenceManager;
 
+import com.example.equipos.R;
 import com.example.equipos.model.data.Team;
 import com.example.equipos.model.repository.TeamRepository;
 import com.example.equipos.view.TeamsActivity;
@@ -71,18 +73,20 @@ public class TeamsActivityVM extends AndroidViewModel
 
     public void delete(Team team)
     {
+        teamsActivity.makeToast(teamsActivity, teamsActivity.getString(R.string.toastDeleting), Toast.LENGTH_LONG);
         teamRepository.delete(team, new TeamRepository.OnDeleteTeamRepositoryListener()
         {
             @Override
             public void onSuccess()
             {
                 fetchTeams();
+                teamsActivity.makeToast(teamsActivity, teamsActivity.getString(R.string.toastDeleted), Toast.LENGTH_SHORT);
             }
 
             @Override
             public void onError()
             {
-
+                teamsActivity.makeToast(teamsActivity, null, Toast.LENGTH_SHORT);
             }
         });
     }

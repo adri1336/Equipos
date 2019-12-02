@@ -59,7 +59,8 @@ public class TeamsRecyclerViewAdapter extends RecyclerView.Adapter<TeamsRecycler
                 .apply(new RequestOptions()
                         .placeholder(R.drawable.ic_team_default)
                         .fitCenter()
-                        .diskCacheStrategy(DiskCacheStrategy.ALL))
+                        .diskCacheStrategy(DiskCacheStrategy.NONE)
+                        .skipMemoryCache(true))
                 .into(holder.ivTeam);
 
         holder.tvTeam.setText(team.getName());
