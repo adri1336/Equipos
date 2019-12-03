@@ -5,8 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context=".view.EditTeamActivity"
-    tools:showIn="@layout/activity_edit_team">
+    tools:context=".view.EditPlayerActivity"
+    tools:showIn="@layout/activity_edit_player">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/clLoading"
@@ -63,14 +63,14 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/guidelineIvTeam"
+            android:id="@+id/guidelineIvPlayer"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             app:layout_constraintGuide_percent="0.3" />
 
         <ImageView
-            android:id="@+id/ivTeam"
+            android:id="@+id/ivPlayer"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_margin="@dimen/defaultMargin"
@@ -78,27 +78,27 @@
             android:cropToPadding="false"
             android:focusable="true"
             android:scaleType="centerInside"
-            app:layout_constraintBottom_toTopOf="@id/guidelineIvTeam"
+            app:layout_constraintBottom_toTopOf="@id/guidelineIvPlayer"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/ic_team_default" />
+            app:srcCompat="@drawable/ic_player_default" />
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/tilName"
+            android:id="@+id/tilFirstname"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/defaultMargin"
-            android:hint="@string/tilName"
-            app:layout_constraintBottom_toTopOf="@+id/tilCity"
+            android:hint="@string/tilFirstname"
+            app:layout_constraintBottom_toTopOf="@+id/tilLastname"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/guidelineIvTeam">
+            app:layout_constraintTop_toBottomOf="@id/guidelineIvPlayer">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/tietName"
+                android:id="@+id/tietFirstname"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:maxLines="1" />
@@ -106,59 +106,20 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/tilCity"
+            android:id="@+id/tilLastname"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/defaultMargin"
-            android:hint="@string/tilCity"
+            android:hint="@string/tilLastname"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tilName">
+            app:layout_constraintTop_toBottomOf="@+id/tilFirstname">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/tietCity"
+                android:id="@+id/tietLastname"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:maxLines="1" />
-
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/tilStadium"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/defaultMargin"
-            android:hint="@string/tilStadium"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tilCity">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/tietStadium"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:maxLines="1" />
-
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/tilStadium_capacity"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/defaultMargin"
-            android:hint="@string/tilStadium_capacity"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tilStadium">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/tietStadium_capacity"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="numberSigned"
                 android:maxLines="1" />
 
         </com.google.android.material.textfield.TextInputLayout>
@@ -172,7 +133,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tilStadium_capacity"
+            app:layout_constraintTop_toBottomOf="@id/tilLastname"
             app:layout_constraintVertical_bias="0.0" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

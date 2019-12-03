@@ -215,6 +215,8 @@ public class AddTeamActivity extends AppCompatActivity
                     if(add)
                     {
                         addTeamActivityVM.setAdding(true);
+                        setLoading(true);
+
                         Team team = new Team(name, city, stadium, Integer.parseInt(stadium_capacity));
                         addTeamActivityVM.add(team);
                     }

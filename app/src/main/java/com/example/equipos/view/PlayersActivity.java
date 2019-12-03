@@ -3,16 +3,11 @@ package com.example.equipos.view;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.MenuItem;
-import android.view.View;
-import android.widget.PopupMenu;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.equipos.R;
-import com.example.equipos.model.data.Team;
-import com.example.equipos.model.view.TeamsActivityVM;
-import com.example.equipos.model.view.TeamsRecyclerViewAdapter;
+import com.example.equipos.model.data.Player;
+import com.example.equipos.model.view.PlayersActivityVM;
+import com.example.equipos.model.view.PlayersRecyclerViewAdapter;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -23,15 +18,24 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.PopupMenu;
+import android.widget.TextView;
+import android.widget.Toast;
+
 import java.util.List;
 
-public class TeamsActivity extends AppCompatActivity
+public class PlayersActivity extends AppCompatActivity
 {
-    private TeamsActivityVM teamsActivityVM;
+
+    private Long id_team;
+
+    private PlayersActivityVM playersActivityVM;
 
     private FloatingActionButton fabAdd;
     private TextView tvError;
-    private RecyclerView rvTeams;
+    private RecyclerView rvPlayers;
 
     private static Toast toast;
 
@@ -39,9 +43,14 @@ public class TeamsActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_teams);
+        setContentView(R.layout.activity_players);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+
+        id_team = getIntent().getExtras().getLong("id_team", 0);
+        if(id_team == 0) finish();
 
         fabAdd = findViewById(R.id.fabAdd);
         fabAdd.setOnClickListener(new View.OnClickListener()
@@ -49,31 +58,31 @@ public class TeamsActivity extends AppCompatActivity
             @Override
             public void onClick(View v)
             {
-                Intent intent = new Intent(TeamsActivity.this, AddTeamActivity.class);
-                TeamsActivity.this.startActivity(intent);
+                Intent intent = new Intent(PlayersActivity.this, AddPlayerActivity.class);
+                intent.putExtra("id_team", id_team);
+                PlayersActivity.this.startActivity(intent);
             }
         });
 
         tvError = findViewById(R.id.tvError);
-        rvTeams = findViewById(R.id.rvTeams);
+        rvPlayers = findViewById(R.id.rvPlayers);
 
-        teamsActivityVM = ViewModelProviders.of(this).get(TeamsActivityVM.class);
-        teamsActivityVM.setTeamsActivity(this);
-
+        playersActivityVM = ViewModelProviders.of(this).get(PlayersActivityVM.class);
+        playersActivityVM.setPlayersActivity(this, id_team);
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         linearLayoutManager.setReverseLayout(true);
         linearLayoutManager.setStackFromEnd(true);
-        rvTeams.setLayoutManager(linearLayoutManager);
-        final TeamsRecyclerViewAdapter teamsRecyclerViewAdapter = new TeamsRecyclerViewAdapter(this, teamsActivityVM.getServer());
-        rvTeams.setAdapter(teamsRecyclerViewAdapter);
-        teamsRecyclerViewAdapter.setOnTeamClickListener(new TeamsRecyclerViewAdapter.OnTeamClickListener()
+        rvPlayers.setLayoutManager(linearLayoutManager);
+        final PlayersRecyclerViewAdapter playersRecyclerViewAdapter = new PlayersRecyclerViewAdapter(this, playersActivityVM.getServer());
+        rvPlayers.setAdapter(playersRecyclerViewAdapter);
+        playersRecyclerViewAdapter.setOnPlayerClickListener(new PlayersRecyclerViewAdapter.OnPlayerClickListener()
         {
             @Override
-            public void onClick(final Team team, ConstraintLayout clTeam)
+            public void onClick(final Player player, ConstraintLayout clPlayer)
             {
-                PopupMenu popup = new PopupMenu(TeamsActivity.this, clTeam);
-                popup.getMenuInflater().inflate(R.menu.team, popup.getMenu());
+                PopupMenu popup = new PopupMenu(PlayersActivity.this, clPlayer);
+                popup.getMenuInflater().inflate(R.menu.player, popup.getMenu());
                 popup.show();
 
                 popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener()
@@ -83,23 +92,16 @@ public class TeamsActivity extends AppCompatActivity
                     {
                         switch(item.getItemId())
                         {
-                            case R.id.tmPlayers:
-                            {
-                                Intent intent = new Intent(TeamsActivity.this, PlayersActivity.class);
-                                intent.putExtra("id_team", team.getId());
-                                TeamsActivity.this.startActivity(intent);
-                                break;
-                            }
                             case R.id.tmEdit:
                             {
-                                Intent intent = new Intent(TeamsActivity.this, EditTeamActivity.class);
-                                intent.putExtra("team", team);
-                                TeamsActivity.this.startActivity(intent);
+                                Intent intent = new Intent(PlayersActivity.this, EditPlayerActivity.class);
+                                intent.putExtra("player", player);
+                                PlayersActivity.this.startActivity(intent);
                                 break;
                             }
                             case R.id.tmDelete:
                             {
-                                teamsActivityVM.delete(team);
+                                playersActivityVM.delete(player);
                                 break;
                             }
                         }
@@ -109,32 +111,26 @@ public class TeamsActivity extends AppCompatActivity
             }
         });
 
-        teamsActivityVM.getLiveTeams().observe(this, new Observer<List<Team>>()
+        playersActivityVM.getLivePlayers().observe(this, new Observer<List<Player>>()
         {
             @Override
-            public void onChanged(List<Team> teams)
+            public void onChanged(List<Player> players)
             {
-                teamsRecyclerViewAdapter.setData(teams);
+                playersRecyclerViewAdapter.setData(players);
             }
         });
-    }
-
-    @Override
-    public void onBackPressed()
-    {
-        moveTaskToBack(true);
     }
 
     public void enableErrorMessage(boolean toggle)
     {
         if(toggle)
         {
-            rvTeams.setVisibility(View.INVISIBLE);
+            rvPlayers.setVisibility(View.INVISIBLE);
             tvError.setVisibility(View.VISIBLE);
         }
         else
         {
-            rvTeams.setVisibility(View.VISIBLE);
+            rvPlayers.setVisibility(View.VISIBLE);
             tvError.setVisibility(View.INVISIBLE);
         }
     }
@@ -152,5 +148,13 @@ public class TeamsActivity extends AppCompatActivity
             toast = Toast.makeText(context, title, duration);
             toast.show();
         }
+    }
+
+    @Override
+    public void onBackPressed()
+    {
+        super.onBackPressed();
+        Intent intent = new Intent(this, TeamsActivity.class);
+        startActivity(intent);
     }
 }

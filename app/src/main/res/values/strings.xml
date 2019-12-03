@@ -30,4 +30,9 @@
     <string name="toastUpdatingError">No se pudo actualizar</string>
     <string name="btUpdate">Actualizar</string>
     <string name="toastUpdating">Actualizando</string>
+    <string name="title_activity_players">Plantilla</string>
+    <string name="title_activity_add_player">Añadir jugador</string>
+    <string name="tilFirstname">Nombre</string>
+    <string name="tilLastname">Apellidos</string>
+    <string name="title_activity_edit_player">Editar jugador</string>
 </resources>

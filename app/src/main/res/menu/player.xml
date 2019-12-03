@@ -1,0 +1,11 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <item
+        android:id="@+id/tmEdit"
+        android:title="@string/tmEdit"/>
+
+    <item
+        android:id="@+id/tmDelete"
+        android:title="@string/tmDelete"/>
+
+</menu>

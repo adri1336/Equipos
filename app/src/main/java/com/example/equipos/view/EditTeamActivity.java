@@ -9,10 +9,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.equipos.R;
 import com.example.equipos.model.data.Team;
-import com.example.equipos.model.view.AddTeamActivityVM;
 import com.example.equipos.model.view.EditTeamActivityVM;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
@@ -25,11 +22,9 @@ import androidx.lifecycle.ViewModelProviders;
 import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 public class EditTeamActivity extends AppCompatActivity
 {

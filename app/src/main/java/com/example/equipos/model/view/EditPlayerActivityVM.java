@@ -15,10 +15,10 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.preference.PreferenceManager;
 
 import com.example.equipos.R;
-import com.example.equipos.model.data.Team;
-import com.example.equipos.model.repository.TeamRepository;
-import com.example.equipos.view.EditTeamActivity;
-import com.example.equipos.view.TeamsActivity;
+import com.example.equipos.model.data.Player;
+import com.example.equipos.model.repository.PlayerRepository;
+import com.example.equipos.view.EditPlayerActivity;
+import com.example.equipos.view.PlayersActivity;
 
 import java.io.BufferedInputStream;
 import java.io.File;
@@ -26,19 +26,18 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
-public class EditTeamActivityVM extends AndroidViewModel
+public class EditPlayerActivityVM extends AndroidViewModel
 {
     private Uri image;
-    private String name, city, stadium;
-    private Integer stadium_capacity;
+    private String firstname, lastname;
 
-    private EditTeamActivity editTeamActivity;
+    private EditPlayerActivity editPlayerActivity;
     private String server;
-    private TeamRepository teamRepository;
+    private PlayerRepository playerRepository;
     private boolean updating;
     private File imageFile;
 
-    public EditTeamActivityVM(@NonNull Application application)
+    public EditPlayerActivityVM(@NonNull Application application)
     {
         super(application);
     }
@@ -53,10 +52,10 @@ public class EditTeamActivityVM extends AndroidViewModel
         this.updating = updating;
     }
 
-    public void update(final Team team)
+    public void update(final Player player)
     {
         updating = true;
-        teamRepository.update(team, new TeamRepository.OnUpdatedTeamRepositoryListener()
+        playerRepository.update(player, new PlayerRepository.OnUpdatedPlayerRepositoryListener()
         {
             @Override
             public void onSuccess(Boolean updated)
@@ -64,27 +63,30 @@ public class EditTeamActivityVM extends AndroidViewModel
                 if(imageFile == null)
                 {
                     updating = false;
-                    Intent intent = new Intent(editTeamActivity, TeamsActivity.class);
-                    editTeamActivity.startActivity(intent);
+                    Intent intent = new Intent(editPlayerActivity, PlayersActivity.class);
+                    intent.putExtra("id_team", player.getId_team());
+                    editPlayerActivity.startActivity(intent);
                 }
                 else
                 {
-                    teamRepository.upload(team.getId(), imageFile, new TeamRepository.OnUploadTeamRepositoryListener()
+                    playerRepository.upload(player.getId(), imageFile, new PlayerRepository.OnUploadPlayerRepositoryListener()
                     {
                         @Override
                         public void onSuccess(Boolean uploaded)
                         {
                             updating = false;
-                            Intent intent = new Intent(editTeamActivity, TeamsActivity.class);
-                            editTeamActivity.startActivity(intent);
+                            Intent intent = new Intent(editPlayerActivity, PlayersActivity.class);
+                            intent.putExtra("id_team", player.getId_team());
+                            editPlayerActivity.startActivity(intent);
                         }
 
                         @Override
                         public void onError()
                         {
                             updating = false;
-                            Intent intent = new Intent(editTeamActivity, TeamsActivity.class);
-                            editTeamActivity.startActivity(intent);
+                            Intent intent = new Intent(editPlayerActivity, PlayersActivity.class);
+                            intent.putExtra("id_team", player.getId_team());
+                            editPlayerActivity.startActivity(intent);
                         }
                     });
                 }
@@ -94,19 +96,19 @@ public class EditTeamActivityVM extends AndroidViewModel
             public void onError()
             {
                 updating = false;
-                editTeamActivity.setLoading(false);
-                Toast.makeText(editTeamActivity, editTeamActivity.getText(R.string.toastUpdatingError), Toast.LENGTH_LONG).show();
+                editPlayerActivity.setLoading(false);
+                Toast.makeText(editPlayerActivity, editPlayerActivity.getText(R.string.toastUpdatingError), Toast.LENGTH_LONG).show();
             }
         });
     }
 
-    public void setEditTeamActivity(EditTeamActivity editTeamActivity)
+    public void setEditPlayerActivity(EditPlayerActivity editPlayerActivity)
     {
-        this.editTeamActivity = editTeamActivity;
+        this.editPlayerActivity = editPlayerActivity;
 
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(editTeamActivity);
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(editPlayerActivity);
         server = sharedPreferences.getString("server", "localhost");
-        teamRepository = new TeamRepository(server);
+        playerRepository = new PlayerRepository(server);
     }
 
     public Uri getImage()
@@ -120,49 +122,24 @@ public class EditTeamActivityVM extends AndroidViewModel
         saveSelectedImageInFile(image);
     }
 
-    public String getServer()
+    public String getFirstname()
     {
-        return server;
+        return firstname;
     }
 
-    public String getName()
+    public void setFirstname(String firstname)
     {
-        return name;
+        this.firstname = firstname;
     }
 
-    public void setName(String name)
+    public String getLastname()
     {
-        this.name = name;
+        return lastname;
     }
 
-    public String getCity()
+    public void setLastname(String lastname)
     {
-        return city;
-    }
-
-    public void setCity(String city)
-    {
-        this.city = city;
-    }
-
-    public String getStadium()
-    {
-        return stadium;
-    }
-
-    public void setStadium(String stadium)
-    {
-        this.stadium = stadium;
-    }
-
-    public Integer getStadium_capacity()
-    {
-        return stadium_capacity;
-    }
-
-    public void setStadium_capacity(Integer stadium_capacity)
-    {
-        this.stadium_capacity = stadium_capacity;
+        this.lastname = lastname;
     }
 
     public void saveSelectedImageInFile(Uri uri)
@@ -172,7 +149,7 @@ public class EditTeamActivityVM extends AndroidViewModel
         {
             try
             {
-                bitmap = MediaStore.Images.Media.getBitmap(editTeamActivity.getContentResolver(), uri);
+                bitmap = MediaStore.Images.Media.getBitmap(editPlayerActivity.getContentResolver(), uri);
             }
             catch (IOException e)
             {
@@ -183,7 +160,7 @@ public class EditTeamActivityVM extends AndroidViewModel
         {
             try
             {
-                final InputStream in = editTeamActivity.getContentResolver().openInputStream(uri);
+                final InputStream in = editPlayerActivity.getContentResolver().openInputStream(uri);
                 BufferedInputStream bufferedInputStream = new BufferedInputStream(in);
                 bitmap = BitmapFactory.decodeStream(bufferedInputStream);
             }
@@ -201,7 +178,7 @@ public class EditTeamActivityVM extends AndroidViewModel
 
     private File saveBitmapInFile(Bitmap bitmap)
     {
-        File file = new File(editTeamActivity.getFilesDir(), "temp.jpg");
+        File file = new File(editPlayerActivity.getFilesDir(), "temp.jpg");
         FileOutputStream out = null;
         try
         {
@@ -215,5 +192,10 @@ public class EditTeamActivityVM extends AndroidViewModel
             file = null;
         }
         return file;
+    }
+
+    public String getServer()
+    {
+        return server;
     }
 }

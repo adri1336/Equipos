@@ -13,10 +13,33 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".view.EditPlayerActivity"
+            android:label="@string/title_activity_edit_player"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:parentActivityName=".view.PlayersActivity"></activity>
+        <activity
+            android:name=".view.AddPlayerActivity"
+            android:label="@string/title_activity_add_player"
+            android:parentActivityName=".view.PlayersActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".view.PlayersActivity" />
+        </activity>
+        <activity
+            android:name=".view.PlayersActivity"
+            android:label="@string/title_activity_players"
+            android:parentActivityName=".view.TeamsActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".view.TeamsActivity" />
+        </activity>
+        <activity
             android:name=".view.EditTeamActivity"
             android:label="@string/title_activity_edit_team"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:parentActivityName=".view.TeamsActivity"></activity>
+            android:parentActivityName=".view.TeamsActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".view.AddTeamActivity"
             android:label="@string/title_activity_add_team"

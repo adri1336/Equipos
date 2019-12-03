@@ -1,7 +1,7 @@
 package com.example.equipos.model.repository;
 
-import com.example.equipos.model.data.Team;
-import com.example.equipos.model.rest.TeamClient;
+import com.example.equipos.model.data.Player;
+import com.example.equipos.model.rest.PlayerClient;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -15,12 +15,12 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class TeamRepository
+public class PlayerRepository
 {
     private String server;
-    private TeamClient teamClient;
+    private PlayerClient playerClient;
 
-    public TeamRepository(String server)
+    public PlayerRepository(String server)
     {
         this.server = server;
 
@@ -29,133 +29,133 @@ public class TeamRepository
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
-        teamClient = retrofit.create(TeamClient.class);
+        playerClient = retrofit.create(PlayerClient.class);
     }
 
-    public void get(final OnGetTeamRepositoryListener onGetTeamRepositoryListener)
+    public void get(Long id_team, final OnGetPlayerRepositoryListener onGetPlayerRepositoryListener)
     {
-        Call<ArrayList<Team>> call = teamClient.get();
-        call.enqueue(new Callback<ArrayList<Team>>()
+        Call<ArrayList<Player>> call = playerClient.getTeam(id_team);
+        call.enqueue(new Callback<ArrayList<Player>>()
         {
             @Override
-            public void onResponse(Call<ArrayList<Team>> call, Response<ArrayList<Team>> response)
+            public void onResponse(Call<ArrayList<Player>> call, Response<ArrayList<Player>> response)
             {
-                onGetTeamRepositoryListener.onSuccess(response.body());
+                onGetPlayerRepositoryListener.onSuccess(response.body());
             }
 
 
             @Override
-            public void onFailure(Call<ArrayList<Team>> call, Throwable t)
+            public void onFailure(Call<ArrayList<Player>> call, Throwable t)
             {
-                onGetTeamRepositoryListener.onError();
+                onGetPlayerRepositoryListener.onError();
             }
         });
     }
 
-    public void add(final Team team, final OnAddTeamRepositoryListener onAddTeamRepositoryListener)
+    public void add(final Player player, final OnAddPlayerRepositoryListener onAddPlayerRepositoryListener)
     {
-        Call<Long> call = teamClient.post(team);
+        Call<Long> call = playerClient.post(player);
         call.enqueue(new Callback<Long>()
         {
             @Override
             public void onResponse(Call<Long> call, Response<Long> response)
             {
-                onAddTeamRepositoryListener.onSuccess(response.body());
+                onAddPlayerRepositoryListener.onSuccess(response.body());
             }
 
             @Override
             public void onFailure(Call<Long> call, Throwable t)
             {
-                onAddTeamRepositoryListener.onError();
+                onAddPlayerRepositoryListener.onError();
             }
         });
     }
 
-    public void upload(Long id, File file, final OnUploadTeamRepositoryListener onUploadTeamRepositoryListener)
+    public void upload(Long id, File file, final OnUploadPlayerRepositoryListener onUploadPlayerRepositoryListener)
     {
         RequestBody requestBody = RequestBody.create(MediaType.parse("image/jpg"), file);
         MultipartBody.Part request = MultipartBody.Part.createFormData("file", id + ".jpg", requestBody);
 
-        Call<Boolean> call = teamClient.upload(request);
+        Call<Boolean> call = playerClient.upload(request);
         call.enqueue(new Callback<Boolean>()
         {
             @Override
             public void onResponse(Call<Boolean> call, Response<Boolean> response)
             {
-                onUploadTeamRepositoryListener.onSuccess(response.body());
+                onUploadPlayerRepositoryListener.onSuccess(response.body());
             }
 
             @Override
             public void onFailure(Call<Boolean> call, Throwable t)
             {
-                onUploadTeamRepositoryListener.onError();
+                onUploadPlayerRepositoryListener.onError();
             }
         });
     }
 
-    public void update(final Team team, final OnUpdatedTeamRepositoryListener onUpdatedTeamRepositoryListener)
+    public void update(final Player player, final OnUpdatedPlayerRepositoryListener onUpdatedPlayerRepositoryListener)
     {
-        Call<Boolean> call = teamClient.put(team.getId(), team);
+        Call<Boolean> call = playerClient.put(player.getId(), player);
         call.enqueue(new Callback<Boolean>()
         {
             @Override
             public void onResponse(Call<Boolean> call, Response<Boolean> response)
             {
-                onUpdatedTeamRepositoryListener.onSuccess(response.body());
+                onUpdatedPlayerRepositoryListener.onSuccess(response.body());
             }
 
             @Override
             public void onFailure(Call<Boolean> call, Throwable t)
             {
-                onUpdatedTeamRepositoryListener.onError();
+                onUpdatedPlayerRepositoryListener.onError();
             }
         });
     }
 
-    public void delete(Team team, final OnDeleteTeamRepositoryListener onDeleteTeamRepositoryListener)
+    public void delete(Player player, final OnDeletePlayerRepositoryListener onDeletePlayerRepositoryListener)
     {
-        Call<Boolean> call = teamClient.delete(team.getId());
+        Call<Boolean> call = playerClient.delete(player.getId());
         call.enqueue(new Callback<Boolean>()
         {
             @Override
             public void onResponse(Call<Boolean> call, Response<Boolean> response)
             {
-                onDeleteTeamRepositoryListener.onSuccess();
+                onDeletePlayerRepositoryListener.onSuccess();
             }
 
             @Override
             public void onFailure(Call<Boolean> call, Throwable t)
             {
-                onDeleteTeamRepositoryListener.onError();
+                onDeletePlayerRepositoryListener.onError();
             }
         });
     }
 
-    public interface OnGetTeamRepositoryListener
+    public interface OnGetPlayerRepositoryListener
     {
-        void onSuccess(ArrayList<Team> teams);
+        void onSuccess(ArrayList<Player> players);
         void onError();
     }
 
-    public interface OnAddTeamRepositoryListener
+    public interface OnAddPlayerRepositoryListener
     {
         void onSuccess(Long id);
         void onError();
     }
 
-    public interface OnUploadTeamRepositoryListener
+    public interface OnUploadPlayerRepositoryListener
     {
         void onSuccess(Boolean uploaded);
         void onError();
     }
 
-    public interface OnUpdatedTeamRepositoryListener
+    public interface OnUpdatedPlayerRepositoryListener
     {
         void onSuccess(Boolean updated);
         void onError();
     }
 
-    public interface OnDeleteTeamRepositoryListener
+    public interface OnDeletePlayerRepositoryListener
     {
         void onSuccess();
         void onError();
